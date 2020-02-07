@@ -1926,8 +1926,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      descricao: ''
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  methods: {
+    newPensamento: function newPensamento() {
+      var pensamento = {
+        id: 2,
+        descricao: this.descricao,
+        created_at: '07/02/2019'
+      };
+      this.$emit('new', pensamento);
+      this.descricao = '';
+    }
   }
 });
 
@@ -1961,6 +1977,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      teste: this.pensamentos,
       pensamentos: [{
         id: 1,
         descricao: "abc",
@@ -1970,6 +1987,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  methods: {
+    adicionarPensamento: function adicionarPensamento(pensamento) {
+      pensamento.id = this.pensamentos.length + 1;
+      this.pensamentos.push(pensamento);
+    }
   }
 });
 
@@ -38025,28 +38048,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("Em quê está pensando agora")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("form", { attrs: { action: "" } }, [
+  return _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("Em quê está pensando agora")
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _c(
+        "form",
+        {
+          attrs: { action: "" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.newPensamento()
+            }
+          }
+        },
+        [
           _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "" } }, [
               _vm._v("Agora estou pensando em:")
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.descricao,
+                  expression: "descricao"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { type: "text", name: "pensamento" }
+              attrs: { type: "text", name: "pensamento" },
+              domProps: { value: _vm.descricao },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.descricao = $event.target.value
+                }
+              }
             })
           ]),
           _vm._v(" "),
@@ -38055,11 +38099,12 @@ var staticRenderFns = [
             { staticClass: "btn btn-primary", attrs: { type: "submit" } },
             [_vm._v("\n                Enviar pensamento\n            ")]
           )
-        ])
-      ])
+        ]
+      )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -38086,7 +38131,7 @@ var render = function() {
       "div",
       { staticClass: "col-md-8" },
       [
-        _c("form-component"),
+        _c("form-component", { on: { new: _vm.adicionarPensamento } }),
         _vm._v(" "),
         _vm._l(_vm.pensamentos, function(pensamento) {
           return _c("pensamento-component", {

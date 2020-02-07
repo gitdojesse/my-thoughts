@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">        
 
-            <form-component></form-component>
+            <form-component @new="adicionarPensamento"></form-component>
 
             <pensamento-component 
                 v-for="pensamento in pensamentos" 
@@ -15,9 +15,10 @@
 </template>
 
 <script>
-    export default {
+    export default {        
         data(){
             return {
+                teste: this.pensamentos,
                 pensamentos: [
                     {
                         id: 1,
@@ -29,6 +30,12 @@
         },
         mounted() {
             console.log('Component mounted.')
+        },
+        methods: {
+            adicionarPensamento(pensamento){     
+                pensamento.id = this.pensamentos.length + 1                
+                this.pensamentos.push(pensamento)
+            }   
         }
     }
 </script>
